@@ -10,20 +10,28 @@ int total_files = 0;
 int total_folders = 0;
 
 void print_file(std::string path) {
-  for (fs::directory_iterator it(path), end; it != end; ++it) {
-    std::string current_path = it->path().string();
+  fs::directory_iterator it(path);
+  fs::directory_iterator end;
 
-    if (it->is_directory()) {
-      total_folders++;
-      print_file(current_path);
+  if (it != end) {
+    while (it != end) {
+      std::string current_path = it->path().string();
+
+      if (it->is_directory()) {
+        total_folders++;
+        print_file(current_path);
+      }
+
+      if (it->is_regular_file()) {
+        total_files++;
+      }
+
+      fmt::println("{}", current_path);
+      it++;
     }
-
-    if (it->is_regular_file()) {
-      total_files++;
-    }
-
-    fmt::println("{}", current_path);
   }
+
+  fmt::println("IT END HERE");
 }
 
 int main(int argc, char *argv[]) {
