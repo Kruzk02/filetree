@@ -1,8 +1,10 @@
 #include "fmt/base.h"
 #include <algorithm>
 #include <cstdio>
+#include <cstdlib>
 #include <filesystem>
 #include <fmt/core.h>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -43,6 +45,11 @@ void print_tree(std::string path, std::string prefix = "") {
 }
 
 int main(int argc, char *argv[]) {
+  if (argc >= 2) {
+    fmt::println("Usage: {} <option>", argv[0]);
+    return 1;
+  }
+
   std::string current_path = fs::current_path().string();
   fmt::println("{}", current_path);
   print_tree(current_path);
