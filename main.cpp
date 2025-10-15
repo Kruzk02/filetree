@@ -16,7 +16,36 @@ struct Total {
 
 Total total;
 
-void print_tree(std::string path, std::string prefix = "") {
+void print_tree(const std::string path, const std::string option);
+void print_tree(const std::string path, const std::string option,
+                std::string prefix);
+
+int main(int argc, char *argv[]) {
+  if (argc > 2) {
+    fmt::println("Usage: {} <option>", argv[0]);
+    return 1;
+  }
+
+  std::string current_path = fs::current_path().string();
+  fmt::println("{}", current_path);
+
+  if (argv[1] == nullptr) {
+    print_tree(current_path, "");
+    return 0;
+  }
+
+  print_tree(current_path, argv[1]);
+  fmt::println("Total numbers of folders: {} and files: {}", total.folders,
+               total.files);
+  return 0;
+}
+
+void print_tree(const std::string path, const std::string option) {
+  print_tree(path, option, "");
+}
+
+void print_tree(const std::string path, const std::string option,
+                std::string prefix = "") {
   std::vector<fs::directory_entry> entries;
 
   for (const auto &entry : fs::directory_iterator(path)) {
@@ -38,25 +67,11 @@ void print_tree(std::string path, std::string prefix = "") {
 
     if (entry.is_directory()) {
       total.folders++;
-      print_tree(entry.path(), prefix + (isLast ? "  " : "\u2502 "));
+      print_tree(entry.path(), option, prefix + (isLast ? "  " : "\u2502 "));
     }
 
     if (entry.is_regular_file()) {
       total.files++;
     }
   }
-}
-
-int main(int argc, char *argv[]) {
-  if (argc > 2) {
-    fmt::println("Usage: {} <option>", argv[0]);
-    return 1;
-  }
-
-  std::string current_path = fs::current_path().string();
-  fmt::println("{}", current_path);
-  print_tree(current_path);
-  fmt::println("Total numbers of folders: {} and files: {}", total.folders,
-               total.files);
-  return 0;
 }
