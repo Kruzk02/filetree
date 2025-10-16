@@ -29,14 +29,8 @@ int main(int argc, char *argv[]) {
   std::string current_path = fs::current_path().string();
   fmt::println("{}", current_path);
 
-  if (argv[1] == nullptr) {
-    print_tree(current_path, "");
-    fmt::println("Total numbers of folders: {} and files: {}", total.folders,
-                 total.files);
-    return 0;
-  }
+  print_tree(current_path, argv[1] == nullptr ? "" : argv[1]);
 
-  print_tree(current_path, argv[1]);
   fmt::println("Total numbers of folders: {} and files: {}", total.folders,
                total.files);
   return 0;
@@ -74,9 +68,9 @@ void print_tree(const std::string path, const std::string option,
     bool isLast = (i == entries.size() - 1);
     std::string name = entry.path().filename();
 
-    fmt::print("{}{}", prefix,
-               (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 "));
-    fmt::println("{}{}", name, (entry.is_directory() ? "/" : ""));
+    fmt::println("{}{}{}{}", prefix,
+                 (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 "), name,
+                 (entry.is_directory() ? "/" : ""));
 
     if (entry.is_directory()) {
       total.folders++;
