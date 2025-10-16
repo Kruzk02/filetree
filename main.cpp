@@ -31,6 +31,8 @@ int main(int argc, char *argv[]) {
 
   if (argv[1] == nullptr) {
     print_tree(current_path, "");
+    fmt::println("Total numbers of folders: {} and files: {}", total.folders,
+                 total.files);
     return 0;
   }
 
@@ -40,21 +42,32 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-void print_tree(const std::string path, const std::string option) {
-  print_tree(path, option, "");
-}
-
-void print_tree(const std::string path, const std::string option,
-                std::string prefix = "") {
+std::vector<fs::directory_entry> getDirectoryEntries(std::string path,
+                                                     std::string option) {
   std::vector<fs::directory_entry> entries;
 
   for (const auto &entry : fs::directory_iterator(path)) {
+    if (option != "-a" && option != "--all") {
+      if (entry.path().filename().string()[0] == '.')
+        continue;
+    }
     entries.push_back(entry);
   }
 
   std::sort(entries.begin(), entries.end(), [](auto &a, auto &b) {
     return a.path().filename() < b.path().filename();
   });
+
+  return entries;
+}
+
+void print_tree(const std::string path, const std::string option) {
+  print_tree(path, option, "");
+}
+
+void print_tree(const std::string path, const std::string option,
+                std::string prefix) {
+  const auto entries = getDirectoryEntries(path, option);
 
   for (int i = 0; i < entries.size(); i++) {
     const auto &entry = entries[i];
