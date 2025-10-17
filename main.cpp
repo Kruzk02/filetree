@@ -45,6 +45,12 @@ std::vector<fs::directory_entry> getDirectoryEntries(std::string path,
       if (entry.path().filename().string()[0] == '.')
         continue;
     }
+
+    if (option == "-d" || option == "--dirs-only") {
+      if (entry.is_regular_file())
+        continue;
+    }
+
     entries.push_back(entry);
   }
 
