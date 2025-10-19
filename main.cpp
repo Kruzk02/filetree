@@ -7,6 +7,10 @@
 #include <string>
 #include <vector>
 
+#ifndef APP_VERSION
+#define APP_VERSION "unknown"
+#endif
+
 namespace fs = std::filesystem;
 
 struct Total {
@@ -27,7 +31,6 @@ int main(int argc, char *argv[]) {
   }
 
   std::string current_path = fs::current_path().string();
-  fmt::println("{}", current_path);
 
   print_tree(current_path, argv[1] == nullptr ? "" : argv[1]);
 
@@ -62,6 +65,13 @@ std::vector<fs::directory_entry> getDirectoryEntries(std::string path,
 }
 
 void print_tree(const std::string path, const std::string option) {
+
+  if (option == "-v" || option == "--version") {
+    fmt::println("Version: {}", APP_VERSION);
+    exit(1);
+  }
+
+  fmt::println("{}", path);
   print_tree(path, option, "");
 }
 
