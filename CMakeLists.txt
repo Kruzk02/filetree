@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(filetree VERSION 1.0)
+project(filetree VERSION 1.0.0)
 
 execute_process(
   COMMAND git describe --tags --dirty
@@ -15,6 +15,17 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
   GIT_TAG 12.0.0)
 FetchContent_MakeAvailable(fmt)
+
+set(filetree_Version_Major 1)
+set(filetree_Version_Minor 0)
+set(filetree_Version_Patch 0)
+set(filetree_Version_Status "-dev")
+
+set(PROJECT_VERSION
+    "${filetree_Version_Major}.${filetree_Version_Minor}.${filetree_Version_Patch}${filetree_Version_Status}+${GIT_VERSION}"
+)
+
+message(STATUS "${PROJECT_NAME} version: ${PROJECT_VERSION}")
 
 add_executable(filetree main.cpp)
 target_link_libraries(filetree PRIVATE fmt::fmt)
