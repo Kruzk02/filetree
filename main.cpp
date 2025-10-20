@@ -21,9 +21,8 @@ struct Total {
 
 Total total;
 
-void print_tree(const std::string path, std::string_view option);
-void print_tree(const std::string path, std::string_view option,
-                std::string prefix);
+std::vector<std::string> build_tree(const std::string &path,
+                                    std::string_view option);
 
 int main(int argc, char *argv[]) {
   if (argc > 2) {
@@ -33,14 +32,16 @@ int main(int argc, char *argv[]) {
 
   std::string current_path = fs::current_path().string();
 
-  print_tree(current_path, argv[1] == nullptr ? "" : argv[1]);
+  auto tree = build_tree(current_path, argv[1] == nullptr ? "" : argv[1]);
+  std::ranges::for_each(
+      tree, [](std::string_view line) { fmt::println("{}", line); });
 
   fmt::println("Total numbers of folders: {} and files: {}", total.folders,
                total.files);
   return 0;
 }
 
-std::vector<fs::directory_entry> getDirectoryEntries(std::string path,
+std::vector<fs::directory_entry> getDirectoryEntries(const std::string &path,
                                                      std::string_view option) {
   std::vector<fs::directory_entry> entries;
 
@@ -65,19 +66,10 @@ std::vector<fs::directory_entry> getDirectoryEntries(std::string path,
   return entries;
 }
 
-void print_tree(const std::string path, std::string_view option) {
-
-  if (option == "-v" || option == "--version") {
-    fmt::println("Version: {}", APP_VERSION);
-    exit(1);
-  }
-
-  fmt::println("{}", path);
-  print_tree(path, option, "");
-}
-
-void print_tree(const std::string path, std::string_view option,
-                std::string prefix) {
+std::vector<std::string> build_tree(const std::string &path,
+                                    std::string_view option,
+                                    const std::string &prefix) {
+  std::vector<std::string> lines;
   const auto entries = getDirectoryEntries(path, option);
 
   for (int i = 0; i < entries.size(); i++) {
@@ -85,17 +77,33 @@ void print_tree(const std::string path, std::string_view option,
     bool isLast = (i == entries.size() - 1);
     std::string name = entry.path().filename();
 
-    fmt::println("{}{}{}{}", prefix,
-                 (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 "), name,
-                 (entry.is_directory() ? "/" : ""));
+    lines.push_back(prefix +
+                    (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ") +
+                    name + (entry.is_directory() ? "/" : ""));
 
     if (entry.is_directory()) {
       total.folders++;
-      print_tree(entry.path(), option, prefix + (isLast ? "  " : "\u2502 "));
+      auto sublines = build_tree(entry.path(), option,
+                                 prefix + (isLast ? "  " : "\u2502 "));
+      lines.insert(lines.end(), sublines.begin(), sublines.end());
     }
 
     if (entry.is_regular_file()) {
       total.files++;
     }
   }
+  return lines;
+}
+
+std::vector<std::string> build_tree(const std::string &path,
+                                    std::string_view option) {
+
+  if (option == "-v" || option == "--version") {
+    fmt::println("Version: {}", APP_VERSION);
+    exit(1);
+  }
+
+  fmt::println("{}", path);
+  auto lines = build_tree(path, option, "");
+  return lines;
 }
