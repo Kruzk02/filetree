@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <fmt/core.h>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #ifndef APP_VERSION
@@ -20,8 +21,8 @@ struct Total {
 
 Total total;
 
-void print_tree(const std::string path, const std::string option);
-void print_tree(const std::string path, const std::string option,
+void print_tree(const std::string path, std::string_view option);
+void print_tree(const std::string path, std::string_view option,
                 std::string prefix);
 
 int main(int argc, char *argv[]) {
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]) {
 }
 
 std::vector<fs::directory_entry> getDirectoryEntries(std::string path,
-                                                     std::string option) {
+                                                     std::string_view option) {
   std::vector<fs::directory_entry> entries;
 
   for (const auto &entry : fs::directory_iterator(path)) {
@@ -64,7 +65,7 @@ std::vector<fs::directory_entry> getDirectoryEntries(std::string path,
   return entries;
 }
 
-void print_tree(const std::string path, const std::string option) {
+void print_tree(const std::string path, std::string_view option) {
 
   if (option == "-v" || option == "--version") {
     fmt::println("Version: {}", APP_VERSION);
@@ -75,7 +76,7 @@ void print_tree(const std::string path, const std::string option) {
   print_tree(path, option, "");
 }
 
-void print_tree(const std::string path, const std::string option,
+void print_tree(const std::string path, std::string_view option,
                 std::string prefix) {
   const auto entries = getDirectoryEntries(path, option);
 
