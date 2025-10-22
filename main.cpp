@@ -41,6 +41,18 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
+void show_help() {
+  fmt::println("usage: tree <option>");
+  fmt::println("  ------ Listing options ------");
+  fmt::println("{:<16}{}", "  -a", "All files are listed.");
+  fmt::println("{:<16}{}", "  -d", "List directories only.");
+
+  fmt::println("  ------ Miscellaneous options ------");
+  fmt::println("{:<16}{}", "  --version", "Print version and exit.");
+  fmt::println("{:<16}{}", "  --help",
+               "Print usage and this help message and exit.");
+}
+
 std::vector<fs::directory_entry> getDirectoryEntries(const std::string &path,
                                                      std::string_view option) {
   std::vector<fs::directory_entry> entries;
@@ -100,6 +112,11 @@ std::vector<std::string> build_tree(const std::string &path,
 
   if (option == "-v" || option == "--version") {
     fmt::println("Version: {}", APP_VERSION);
+    exit(1);
+  }
+
+  if (option == "--help") {
+    show_help();
     exit(1);
   }
 
