@@ -7,6 +7,7 @@ execute_process(
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
@@ -15,6 +16,22 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
   GIT_TAG 12.0.0)
 FetchContent_MakeAvailable(fmt)
+
+include(CTest)
+enable_testing()
+
+FetchContent_Declare(
+  Catch2
+  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+  GIT_TAG v3.11.0)
+FetchContent_MakeAvailable(Catch2)
+
+add_executable(filetree_tests tests/test_main.cpp tests/test_filetree.cpp)
+
+target_link_libraries(filetree_tests PRIVATE Catch2::Catch2WithMain fmt::fmt)
+
+include(Catch)
+catch_discover_tests(filetree_tests)
 
 set(filetree_Version_Major 1)
 set(filetree_Version_Minor 0)
