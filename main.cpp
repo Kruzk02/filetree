@@ -110,7 +110,7 @@ std::vector<std::string> build_tree(const std::string &path,
 std::vector<std::string> build_tree(const std::string &path,
                                     std::string_view option) {
 
-  if (option == "-v" || option == "--version") {
+  if (option == "--version") {
     fmt::println("Version: {}", APP_VERSION);
     exit(1);
   }
