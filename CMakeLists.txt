@@ -44,7 +44,8 @@ set(PROJECT_VERSION
 
 message(STATUS "${PROJECT_NAME} version: ${PROJECT_VERSION}")
 
-add_executable(filetree main.cpp)
+add_executable(filetree src/main.cpp src/TreeApp.cpp src/FileTree.cpp)
+target_include_directories(filetree PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(filetree PRIVATE fmt::fmt)
 target_compile_definitions(filetree PRIVATE APP_VERSION="${GIT_VERSION}")
 if(NOT CMAKE_BUILD_TYPE)
