@@ -26,7 +26,13 @@ FetchContent_Declare(
   GIT_TAG v3.11.0)
 FetchContent_MakeAvailable(Catch2)
 
-add_executable(filetree_tests tests/test_main.cpp tests/test_filetree.cpp)
+add_executable(filetree_tests
+        tests/test_main.cpp
+        tests/test_filetree.cpp
+        tests/test_TreeApp.cpp
+        src/TreeApp.cpp
+        src/FileTree.cpp
+)
 
 target_link_libraries(filetree_tests PRIVATE Catch2::Catch2WithMain fmt::fmt)
 
