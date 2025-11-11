@@ -1,6 +1,5 @@
 #include "../include/FileTree.h"
 #include <algorithm>
-#include <cstddef>
 #include <filesystem>
 #include <string>
 #include <string_view>
@@ -26,7 +25,7 @@ std::vector<fs::directory_entry> FileTree::getEntries(const std::string &path,
     entries.push_back(entry);
   }
 
-  std::sort(entries.begin(), entries.end(), [](auto &a, auto &b) {
+  std::ranges::sort(entries.begin(), entries.end(), [](auto &a, auto &b) {
     return a.path().filename() < b.path().filename();
   });
 
@@ -35,18 +34,19 @@ std::vector<fs::directory_entry> FileTree::getEntries(const std::string &path,
 
 std::vector<std::string> FileTree::buildRecursive(const std::string &path,
                                                   std::string_view option,
-                                                  const std::string prefix) {
+                                                  const std::string &prefix) {
   std::vector<std::string> lines;
-  auto entries = getEntries(path, option);
+  const auto entries = getEntries(path, option);
 
   for (size_t i = 0; i < entries.size(); i++) {
     const auto &entry = entries[i];
-    bool isLast = (i == entries.size() - 1);
-    std::string name = entry.path().filename();
+    const bool isLast = (i == entries.size() - 1);
+    const std::string name = entry.path().filename().string();
 
-    lines.push_back(prefix +
-                    (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ") +
-                    name + (entry.is_directory() ? "/" : ""));
+    std::string line = prefix +  (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ");
+    line += name;
+    if (entry.is_directory()) line += "/";
+    lines.push_back(line);
 
     if (entry.is_directory()) {
       totalFolders++;
@@ -63,4 +63,10 @@ std::vector<std::string> FileTree::buildRecursive(const std::string &path,
 std::vector<std::string> FileTree::build(const std::string &path,
                                          std::string_view option) {
   return buildRecursive(path, option, "");
+}
+int FileTree::getTotalFiles() const {
+  return totalFiles;
+}
+int FileTree::getTotalFolders() const {
+  return totalFolders;
 }
