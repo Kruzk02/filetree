@@ -1,9 +1,12 @@
 #include "../include/FileTree.h"
 #include <algorithm>
 #include <filesystem>
+#include <iostream>
 #include <string>
 #include <string_view>
 #include <vector>
+
+#include "../cmake-build-debug/_deps/catch2-src/src/catch2/benchmark/catch_clock.hpp"
 
 namespace fs = std::filesystem;
 
@@ -40,11 +43,17 @@ std::vector<std::string> FileTree::buildRecursive(const std::string &path,
 
   for (size_t i = 0; i < entries.size(); i++) {
     const auto &entry = entries[i];
-    const bool isLast = (i == entries.size() - 1);
-    const std::string name = entry.path().filename().string();
+    const bool isLast = i == entries.size() - 1;
+    std::string name = entry.path().filename().string();
 
-    std::string line = prefix +  (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ");
+    std::string line = prefix + (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ");
+
+    if (option == "-f" || option == "--full-path") {
+      if (entry.is_regular_file())
+       name = entry.path().string();
+    }
     line += name;
+
     if (entry.is_directory()) line += "/";
     lines.push_back(line);
 
@@ -64,9 +73,11 @@ std::vector<std::string> FileTree::build(const std::string &path,
                                          std::string_view option) {
   return buildRecursive(path, option, "");
 }
+
 int FileTree::getTotalFiles() const {
   return totalFiles;
 }
+
 int FileTree::getTotalFolders() const {
   return totalFolders;
 }
