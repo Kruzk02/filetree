@@ -52,6 +52,19 @@ std::vector<std::string> FileTree::buildRecursive(const std::string &path,
       if (entry.is_regular_file())
        name = entry.path().string();
     }
+
+    if (option == "-D") {
+      char buff[11];
+
+      auto last_write_time = entry.last_write_time();
+      auto system_time = std::chrono::file_clock::to_sys(last_write_time);
+      auto time_t_value = std::chrono::system_clock::to_time_t(system_time);
+
+      strftime(buff, 11, "%Y-%m-%d", localtime(&time_t_value));
+
+      name = "[" + std::string(buff) + "]" + "  " + name;
+    }
+
     line += name;
 
     if (entry.is_directory()) line += "/";
