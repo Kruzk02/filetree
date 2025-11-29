@@ -28,12 +28,13 @@ FetchContent_MakeAvailable(Catch2)
 
 add_executable(filetree_tests
         tests/test_main.cpp
-        tests/test_FileTree.cpp
-        tests/test_TreeApp.cpp
-        src/TreeApp.cpp
-        src/FileTree.cpp
+        tests/test_filetree.cpp
+        tests/test_treeapp.cpp
+        src/treeapp.cpp
+        src/filetree.cpp
 )
 
+target_include_directories(filetree_tests PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(filetree_tests PRIVATE Catch2::Catch2WithMain fmt::fmt)
 
 include(Catch)
@@ -68,8 +69,8 @@ endif()
 message(STATUS "filetree Build Type: ${CMAKE_BUILD_TYPE}")
 
 # Set the version for myProject
-set(filetree_Version_Major 0)
-set(filetree_Version_Minor 1)
+set(filetree_Version_Major 1)
+set(filetree_Version_Minor 0)
 set(filetree_Version_Patch 0)
 set(filetree_Version_Status "-dev")
 set(PROJECT_VERSION

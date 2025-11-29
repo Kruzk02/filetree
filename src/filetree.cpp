@@ -1,4 +1,4 @@
-#include "../include/filetree.h"
+#include <filetree.h>
 #include <algorithm>
 #include <filesystem>
 #include <iostream>

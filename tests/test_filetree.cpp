@@ -2,7 +2,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <fmt/core.h>
 
-#include "../include/filetree.h"
+#include <filetree.h>
 
 TEST_CASE("FileTree::build() with no option", "No option") {
   filetree fileTree;

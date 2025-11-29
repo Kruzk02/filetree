@@ -1,6 +1,6 @@
-#include "../include/treeapp.h"
-#include "../include/filetree.h"
-#include "fmt/base.h"
+#include <treeapp.h>
+#include <filetree.h>
+#include <fmt/base.h>
 #include <filesystem>
 #include <string>
 #include <string_view>
