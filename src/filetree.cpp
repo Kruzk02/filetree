@@ -1,4 +1,4 @@
-#include "../include/FileTree.h"
+#include "../include/filetree.h"
 #include <algorithm>
 #include <filesystem>
 #include <iostream>
@@ -8,7 +8,7 @@
 
 namespace fs = std::filesystem;
 
-std::vector<fs::directory_entry> FileTree::getEntries(const std::string &path,
+std::vector<fs::directory_entry> filetree::getEntries(const std::string &path,
                                                       std::string_view option) {
   std::vector<fs::directory_entry> entries;
 
@@ -23,7 +23,7 @@ std::vector<fs::directory_entry> FileTree::getEntries(const std::string &path,
   return entries;
 }
 
-std::vector<std::string> FileTree::buildRecursive(const std::string &path,
+std::vector<std::string> filetree::buildRecursive(const std::string &path,
                                                   std::string_view option,
                                                   const std::string &prefix) {
   std::vector<std::string> lines;
@@ -80,15 +80,15 @@ std::vector<std::string> FileTree::buildRecursive(const std::string &path,
   return lines;
 }
 
-std::vector<std::string> FileTree::build(const std::string &path,
+std::vector<std::string> filetree::build(const std::string &path,
                                          std::string_view option) {
   return buildRecursive(path, option, "");
 }
 
-int FileTree::getTotalFiles() const {
+int filetree::getTotalFiles() const {
   return totalFiles;
 }
 
-int FileTree::getTotalFolders() const {
+int filetree::getTotalFolders() const {
   return totalFolders;
 }

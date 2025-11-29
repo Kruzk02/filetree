@@ -1,11 +1,11 @@
-#include "../include/TreeApp.h"
-#include "../include/FileTree.h"
+#include "../include/treeapp.h"
+#include "../include/filetree.h"
 #include "fmt/base.h"
 #include <filesystem>
 #include <string>
 #include <string_view>
 
-void TreeApp::showHelp() {
+void treeapp::showHelp() {
   fmt::println("usage: tree <option>");
   fmt::println("  ------ Listing options ------");
   fmt::println("{:<16}{}", "  -a", "All files are listed.");
@@ -17,7 +17,7 @@ void TreeApp::showHelp() {
                "Print usage and this help message and exit.");
 }
 
-void TreeApp::showVersion() {
+void treeapp::showVersion() {
 #ifdef APP_VERSION
   fmt::println("Version: {}", APP_VERSION);
 #else
@@ -25,7 +25,7 @@ void TreeApp::showVersion() {
 #endif
 }
 
-int TreeApp::run(int argc, char *argv[]) {
+int treeapp::run(int argc, char *argv[]) {
   if (argc > 2) {
     fmt::println("Usage: {} <option>", argv[0]);
     return 1;
@@ -45,7 +45,7 @@ int TreeApp::run(int argc, char *argv[]) {
   std::string current_path = std::filesystem::current_path().string();
   fmt::println("{}", current_path);
 
-  FileTree tree;
+  filetree tree;
   for (auto lines = tree.build(current_path, option); auto &line : lines)
     fmt::println("{}", line);
 

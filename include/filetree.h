@@ -5,7 +5,7 @@
 #include <string_view>
 #include <vector>
 
-class FileTree {
+class filetree {
 public:
   std::vector<std::string> build(const std::string &path,
                                  std::string_view option);

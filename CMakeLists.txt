@@ -28,7 +28,7 @@ FetchContent_MakeAvailable(Catch2)
 
 add_executable(filetree_tests
         tests/test_main.cpp
-        tests/test_filetree.cpp
+        tests/test_FileTree.cpp
         tests/test_TreeApp.cpp
         src/TreeApp.cpp
         src/FileTree.cpp
