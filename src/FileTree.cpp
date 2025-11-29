@@ -6,8 +6,6 @@
 #include <string_view>
 #include <vector>
 
-#include "../cmake-build-debug/_deps/catch2-src/src/catch2/benchmark/catch_clock.hpp"
-
 namespace fs = std::filesystem;
 
 std::vector<fs::directory_entry> FileTree::getEntries(const std::string &path,
@@ -15,16 +13,6 @@ std::vector<fs::directory_entry> FileTree::getEntries(const std::string &path,
   std::vector<fs::directory_entry> entries;
 
   for (const auto &entry : fs::directory_iterator(path)) {
-    if (option != "-a" && option != "--all") {
-      if (entry.path().filename().string()[0] == '.')
-        continue;
-    }
-
-    if (option == "-d" || option == "--dirs-only") {
-      if (entry.is_regular_file())
-        continue;
-    }
-
     entries.push_back(entry);
   }
 
@@ -48,9 +36,19 @@ std::vector<std::string> FileTree::buildRecursive(const std::string &path,
 
     std::string line = prefix + (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ");
 
+    if (option != "-a" && option != "--all") {
+      if (name[0] == '.')
+        continue;
+    }
+
+    if (option == "-d" || option == "--dirs-only") {
+      if (entry.is_regular_file())
+        continue;
+    }
+
     if (option == "-f" || option == "--full-path") {
       if (entry.is_regular_file())
-       name = entry.path().string();
+        name = entry.path().string();
     }
 
     if (option == "-D") {
@@ -62,7 +60,7 @@ std::vector<std::string> FileTree::buildRecursive(const std::string &path,
 
       strftime(buff, 11, "%Y-%m-%d", localtime(&time_t_value));
 
-      name = "[" + std::string(buff) + "]" + "  " + name;
+      name = std::format("[{}]  {}", std::string_view(buff, sizeof(buff)), name);
     }
 
     line += name;
