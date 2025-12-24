@@ -1,15 +1,14 @@
 #include <filetree.h>
 #include <algorithm>
 #include <filesystem>
-#include <iostream>
+#include <format>
 #include <string>
 #include <string_view>
 #include <vector>
 
 namespace fs = std::filesystem;
 
-std::vector<fs::directory_entry> filetree::getEntries(const std::string &path,
-                                                      std::string_view option) {
+std::vector<fs::directory_entry> filetree::getEntries(const std::string &path) {
   std::vector<fs::directory_entry> entries;
 
   for (const auto &entry : fs::directory_iterator(path)) {
@@ -27,7 +26,7 @@ std::vector<std::string> filetree::buildRecursive(const std::string &path,
                                                   std::string_view option,
                                                   const std::string &prefix) {
   std::vector<std::string> lines;
-  const auto entries = getEntries(path, option);
+  const auto entries = getEntries(path);
 
   for (size_t i = 0; i < entries.size(); i++) {
     const auto &entry = entries[i];
@@ -36,18 +35,15 @@ std::vector<std::string> filetree::buildRecursive(const std::string &path,
 
     std::string line = prefix + (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ");
 
-    if (option != "-a" && option != "--all") {
-      if (name[0] == '.')
+    if (option != "-a" && option != "--all" && name[0] == '.') {
         continue;
     }
 
-    if (option == "-d" || option == "--dirs-only") {
-      if (entry.is_regular_file())
+    if ((option == "-d" || option == "--dirs-only") && entry.is_regular_file()) {
         continue;
     }
 
-    if (option == "-f" || option == "--full-path") {
-      if (entry.is_regular_file())
+    if ((option == "-f" || option == "--full-path") && entry.is_regular_file()) {
         name = entry.path().string();
     }
 
@@ -63,9 +59,8 @@ std::vector<std::string> filetree::buildRecursive(const std::string &path,
       name = std::format("[{}]  {}", std::string_view(buff, sizeof(buff)), name);
     }
 
-    line += name;
+    line += name + (entry.is_directory() ? "/" : "");
 
-    if (entry.is_directory()) line += "/";
     lines.push_back(line);
 
     if (entry.is_directory()) {
@@ -81,7 +76,7 @@ std::vector<std::string> filetree::buildRecursive(const std::string &path,
 }
 
 std::vector<std::string> filetree::build(const std::string &path,
-                                         std::string_view option) {
+                                         const std::string_view option) {
   return buildRecursive(path, option, "");
 }
 

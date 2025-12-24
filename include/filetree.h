@@ -17,7 +17,7 @@ private:
                                           std::string_view option,
                                           const std::string &prefix);
   static std::vector<std::filesystem::directory_entry>
-  getEntries(const std::string &path, std::string_view option);
+  getEntries(const std::string &path);
   int totalFiles = 0;
   int totalFolders = 0;
 };
