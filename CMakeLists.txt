@@ -30,8 +30,8 @@ add_executable(filetree_tests
         tests/test_main.cpp
         tests/test_filetree.cpp
         tests/test_treeapp.cpp
-        src/treeapp.cpp
-        src/filetree.cpp
+        src/tree_app.cpp
+        src/file_tree.cpp
 )
 
 target_include_directories(filetree_tests PRIVATE ${PROJECT_SOURCE_DIR}/include)
@@ -51,7 +51,7 @@ set(PROJECT_VERSION
 
 message(STATUS "${PROJECT_NAME} version: ${PROJECT_VERSION}")
 
-add_executable(filetree src/main.cpp src/TreeApp.cpp src/FileTree.cpp)
+add_executable(filetree src/main.cpp src/tree_app.cpp src/file_tree.cpp)
 target_include_directories(filetree PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(filetree PRIVATE fmt::fmt)
 target_compile_definitions(filetree PRIVATE APP_VERSION="${GIT_VERSION}")

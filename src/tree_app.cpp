@@ -1,11 +1,11 @@
-#include <treeapp.h>
-#include <filetree.h>
+#include <tree_app.h>
+#include <file_tree.h>
 #include <fmt/base.h>
 #include <filesystem>
 #include <string>
 #include <string_view>
 
-void treeapp::showHelp() {
+void TreeApp::showHelp() {
   fmt::println("usage: tree <option>");
   fmt::println("  ------ Listing options ------");
   fmt::println("{:<16}{}", "  -a", "All files are listed.");
@@ -17,7 +17,7 @@ void treeapp::showHelp() {
                "Print usage and this help message and exit.");
 }
 
-void treeapp::showVersion() {
+void TreeApp::showVersion() {
 #ifdef APP_VERSION
   fmt::println("Version: {}", APP_VERSION);
 #else
@@ -25,7 +25,7 @@ void treeapp::showVersion() {
 #endif
 }
 
-int treeapp::run(int argc, char *argv[]) {
+int TreeApp::run(int argc, char *argv[]) {
   if (argc > 2) {
     fmt::println("Usage: {} <option>", argv[0]);
     return 1;
@@ -45,8 +45,9 @@ int treeapp::run(int argc, char *argv[]) {
   std::string current_path = std::filesystem::current_path().string();
   fmt::println("{}", current_path);
 
-  filetree tree;
-  for (auto lines = tree.build(current_path, option); auto &line : lines)
+
+  FileTree tree;
+  for (auto lines = tree.build(current_path, FileTree::parseOptions(option)); auto &line : lines)
     fmt::println("{}", line);
 
   fmt::println("Total folders: {} | Total files: {}", tree.getTotalFolders(),

@@ -1,6 +1,6 @@
 #pragma once
 
-class treeapp {
+class TreeApp {
 public:
     static int run(int argc, char *argv[]);
 

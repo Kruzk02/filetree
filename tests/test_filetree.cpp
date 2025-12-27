@@ -2,10 +2,10 @@
 #include <catch2/catch_test_macros.hpp>
 #include <fmt/core.h>
 
-#include <filetree.h>
+#include <file_tree.h>
 
 TEST_CASE("FileTree::build() with no option", "No option") {
-  filetree fileTree;
+  FileTree fileTree;
   const auto res = fileTree.build(".", "");
   REQUIRE(!res.empty());
   REQUIRE(fileTree.getTotalFiles() > 0);
@@ -13,7 +13,7 @@ TEST_CASE("FileTree::build() with no option", "No option") {
 }
 
 TEST_CASE("FileTree::build() with all option", "-a option") {
-  filetree fileTree;
+  FileTree fileTree;
   const auto res = fileTree.build(".", "-a");
   REQUIRE(!res.empty());
   REQUIRE(fileTree.getTotalFiles() > 0);
@@ -21,7 +21,7 @@ TEST_CASE("FileTree::build() with all option", "-a option") {
 }
 
 TEST_CASE("FileTree::build() with directory only option", "-d option") {
-  filetree fileTree;
+  FileTree fileTree;
   const auto res = fileTree.build(".", "-d");
   REQUIRE(!res.empty());
   REQUIRE(fileTree.getTotalFiles() == 0);
@@ -29,7 +29,7 @@ TEST_CASE("FileTree::build() with directory only option", "-d option") {
 }
 
 TEST_CASE("FileTree::build() with full path option", "-f option") {
-  filetree fileTree;
+  FileTree fileTree;
   const auto res = fileTree.build(".", "-f");
   REQUIRE(fileTree.getTotalFiles() > 0);
   REQUIRE(fileTree.getTotalFolders() > 0);
