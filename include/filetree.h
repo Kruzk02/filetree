@@ -18,6 +18,7 @@ private:
                                           const std::string &prefix);
   static std::vector<std::filesystem::directory_entry>
   getEntries(const std::string &path);
+  static std::string formatDate(const std::filesystem::file_time_type& entry);
   int totalFiles = 0;
   int totalFolders = 0;
 };

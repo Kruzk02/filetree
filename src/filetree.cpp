@@ -22,51 +22,55 @@ std::vector<fs::directory_entry> filetree::getEntries(const std::string &path) {
   return entries;
 }
 
+std::string filetree::formatDate(const std::filesystem::file_time_type &entry) {
+  const auto sys = std::chrono::file_clock::to_sys(entry);
+  const std::time_t t = std::chrono::system_clock::to_time_t(sys);
+
+  char buf[11];
+  std::strftime(buf, sizeof(buf), "%Y-%m-%d", std::localtime(&t));
+  return std::format("[{}]", buf);
+}
+
 std::vector<std::string> filetree::buildRecursive(const std::string &path,
-                                                  std::string_view option,
+                                                  const std::string_view option,
                                                   const std::string &prefix) {
+  const bool showAll  = option == "-a" || option == "--all";
+  const bool dirsOnly = option == "-d" || option == "--dirs-only";
+  const bool fullPath = option == "-f" || option == "--full-path";
+  const bool showDate = option == "-D";
+
   std::vector<std::string> lines;
   const auto entries = getEntries(path);
 
   for (size_t i = 0; i < entries.size(); i++) {
     const auto &entry = entries[i];
     const bool isLast = i == entries.size() - 1;
+
     std::string name = entry.path().filename().string();
+    if (name.empty()) continue;
 
-    std::string line = prefix + (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ");
+    if (!showAll && name.starts_with('.')) continue;
+    if (dirsOnly && entry.is_regular_file()) continue;
 
-    if (option != "-a" && option != "--all" && name[0] == '.') {
-        continue;
+    if (fullPath && entry.is_directory()) name = entry.path().string();
+    if (showDate) {
+      const auto date = formatDate(entry.last_write_time()) += "  " + name;
+      name.clear();
+      name += date;
     }
 
-    if ((option == "-d" || option == "--dirs-only") && entry.is_regular_file()) {
-        continue;
-    }
-
-    if ((option == "-f" || option == "--full-path") && entry.is_regular_file()) {
-        name = entry.path().string();
-    }
-
-    if (option == "-D") {
-      char buff[11];
-
-      auto last_write_time = entry.last_write_time();
-      auto system_time = std::chrono::file_clock::to_sys(last_write_time);
-      auto time_t_value = std::chrono::system_clock::to_time_t(system_time);
-
-      strftime(buff, 11, "%Y-%m-%d", localtime(&time_t_value));
-
-      name = std::format("[{}]  {}", std::string_view(buff, sizeof(buff)), name);
-    }
-
-    line += name + (entry.is_directory() ? "/" : "");
-
+    std::string line = prefix;
+    line += isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ";
+    line += name;
+    if (entry.is_directory()) line += "/";
     lines.push_back(line);
 
     if (entry.is_directory()) {
       totalFolders++;
-      auto sub = buildRecursive(entry.path().string(), option,
-                                prefix + (isLast ? "  " : "\u2502 "));
+      auto sub = buildRecursive(
+        entry.path().string(),
+        option,
+        prefix + (isLast ? "  " : "\u2502 "));
       lines.insert(lines.end(), sub.begin(), sub.end());
     } else {
       totalFiles++;
