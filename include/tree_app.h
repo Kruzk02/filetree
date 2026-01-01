@@ -1,4 +1,5 @@
 #pragma once
+#include "file_tree.h"
 
 class TreeApp {
 public:
@@ -7,4 +8,5 @@ public:
 private:
     static void showHelp();
     static void showVersion();
+    static FileTree::Options parseOptions(int argc, char* argv[]);
 };
