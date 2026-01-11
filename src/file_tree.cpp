@@ -72,6 +72,10 @@ std::vector<std::string> FileTree::buildRecursive(const std::filesystem::path &p
         }
     }
 
+    if (options.reverseOrder) {
+        std::ranges::reverse(entries);
+    }
+
     for (size_t i = 0; i < entries.size(); i++) {
         const auto &entry = entries[i];
         const bool isLast = i == entries.size() - 1;

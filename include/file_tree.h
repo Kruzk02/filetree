@@ -3,7 +3,6 @@
 #include <filesystem>
 #include <optional>
 #include <string>
-#include <string_view>
 #include <vector>
 
 class FileTree {
@@ -14,6 +13,7 @@ public:
         bool fullPath = false;
         bool showDate = false;
         std::optional<int> maxDepth;
+        bool reverseOrder = false;
     };
 
     std::vector<std::string> build(const std::filesystem::path &path,

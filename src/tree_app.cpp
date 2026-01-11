@@ -55,6 +55,8 @@ FileTree::Options TreeApp::parseOptions(int argc, char *argv[]) {
             if (++i >= argc)
                 throw std::runtime_error("-L requires a number");
             opts.maxDepth = std::stoi(argv[i]);
+        } else if (arg == "-r" || arg == "--reverse-order") {
+            opts.reverseOrder = true;
         }
         else {
             throw std::runtime_error(fmt::format("Unknown option: {}", arg));
