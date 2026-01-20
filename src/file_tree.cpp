@@ -1,4 +1,4 @@
-#include <file_tree.h>
+﻿#include <file_tree.h>
 #include <algorithm>
 #include <filesystem>
 #include <format>
@@ -36,11 +36,20 @@ std::string FileTree::formatEntry(const std::filesystem::directory_entry &entry,
 }
 
 std::string FileTree::formatDate(const std::filesystem::file_time_type &time) {
-    const auto sys = std::chrono::file_clock::to_sys(time);
-    const std::time_t t = std::chrono::system_clock::to_time_t(sys);
+    using namespace std::chrono;
+
+    auto sctp = time_point_cast<system_clock::duration>(
+        time - fs::file_time_type::clock::now()
+        + system_clock::now()
+    );
+
+    std::time_t t = system_clock::to_time_t(sctp);
 
     char buf[11];
-    std::strftime(buf, sizeof(buf), "%Y-%m-%d", std::localtime(&t));
+    std::tm tm{};
+    localtime_s(&tm, &t);
+    std::strftime(buf, sizeof(buf), "%Y-%m-%d", &tm);
+
     return std::format("[{}]", buf);
 }
 
