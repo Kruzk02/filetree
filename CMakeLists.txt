@@ -13,6 +13,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(fmt)
 
 file(GLOB_RECURSE APP_SRC CONFIGURE_DEPENDS src/*.cpp)
-add_executable(filetree ${APP_SRC})
+add_executable(filetree ${APP_SRC} "src/formatting.cpp" "include/formatting.h")
 target_include_directories(filetree PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(filetree PRIVATE fmt::fmt)

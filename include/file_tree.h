@@ -31,11 +31,6 @@ private:
     static bool shouldInclude(const std::filesystem::directory_entry &entry,
                               const Options &options);
 
-    static std::string formatDate(const std::filesystem::file_time_type &time);
-
-    static std::string formatEntry(const std::filesystem::directory_entry &entry,
-                                   const Options &options);
-
     static std::vector<std::filesystem::directory_entry>
     getEntries(const std::filesystem::path &path);
 
