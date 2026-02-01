@@ -1,5 +1,7 @@
 ﻿#include <file_tree.h>
 #include <formatting.h>
+#include <filtering.h>
+
 #include <algorithm>
 #include <filesystem>
 #include <format>
@@ -8,15 +10,6 @@
 #include <vector>
 
 namespace fs = std::filesystem;
-
-bool FileTree::shouldInclude(const std::filesystem::directory_entry &entry, const Options &options) {
-    const auto name = entry.path().filename().string();
-
-    if (name.empty()) return false;
-    if (!options.showAll && name.starts_with('.')) return false;
-    if (options.dirsOnly && entry.is_regular_file()) return false;
-    return true;
-}
 
 std::vector<fs::directory_entry> FileTree::getEntries(const std::filesystem::path &path) {
     std::vector<fs::directory_entry> entries;
@@ -38,11 +31,13 @@ std::vector<std::string> FileTree::buildRecursive(const std::filesystem::path &p
                                                   const std::string &prefix,
                                                   int depth) {
     Formatting formatting;
+    Filtering filtering;
+
     std::vector<std::string> lines;
     std::vector<fs::directory_entry> entries;
 
     for (const auto& e : getEntries(path)) {
-        if (shouldInclude(e, options)) {
+        if (filtering.shouldInclude(e, options)) {
             entries.push_back(e);
         }
     }
