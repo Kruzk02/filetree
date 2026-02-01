@@ -1,5 +1,7 @@
 #pragma once
 
+#include <options.h>
+
 #include <filesystem>
 #include <optional>
 #include <string>
@@ -7,15 +9,6 @@
 
 class FileTree {
 public:
-	struct Options {
-		bool showAll = false;
-		bool dirsOnly = false;
-		bool fullPath = false;
-		bool showDate = false;
-		std::optional<int> maxDepth;
-		bool reverseOrder = false;
-	};
-
 	std::vector<std::string> build(const std::filesystem::path& path,
 		const Options& options);
 

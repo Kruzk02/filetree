@@ -1,7 +1,7 @@
 #include <filtering.h>
 
 bool Filtering::shouldInclude(const std::filesystem::directory_entry& entry,
-	const FileTree::Options& options) {
+	const Options& options) {
 	const auto name = entry.path().filename().string();
 
 	if (name.empty()) return false;

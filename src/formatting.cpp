@@ -21,7 +21,7 @@ std::string Formatting::formatDate(const std::filesystem::file_time_type& time) 
 }
 
 std::string Formatting::formatEntry(const std::filesystem::directory_entry& entry,
-	const FileTree::Options& options) {
+	const Options& options) {
     std::string name = entry.path().filename().string();
 
     if (options.fullPath && entry.is_regular_file()) {

@@ -1,5 +1,7 @@
 #include <tree_app.h>
 #include <file_tree.h>
+#include <options.h>
+
 #include <fmt/base.h>
 #include <filesystem>
 #include <string>
@@ -35,8 +37,8 @@ void TreeApp::showVersion() {
 #endif
 }
 
-FileTree::Options TreeApp::parseOptions(int argc, char *argv[]) {
-    FileTree::Options opts;
+Options TreeApp::parseOptions(int argc, char *argv[]) {
+    Options opts;
 
     for (int i = 1; i < argc; ++i) {
         if (std::string_view arg{argv[i]}; arg == "-a" || arg == "--all") {
