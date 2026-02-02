@@ -60,11 +60,15 @@ Options TreeApp::parseOptions(int argc, char *argv[]) {
         } else if (arg == "-r" || arg == "--reverse-order") {
             opts.reverseOrder = true;
         }
+        else if (arg == "-I" || arg == "--ignore") {
+            if (++i >= argc)
+                throw std::runtime_error("-L requires a folder or files");
+            opts.ignore += argv[i];
+        }
         else {
             throw std::runtime_error(fmt::format("Unknown option: {}", arg));
         }
     }
-
     return opts;
 }
 
