@@ -1,6 +1,5 @@
 #include "filtering.h"
 
-// TODO: Move the parse to TreeApp
 bool Filtering::shouldInclude(const std::filesystem::directory_entry& entry,
 	const Options& options) {
 	const std::string name = entry.path().filename().string();
@@ -10,20 +9,8 @@ bool Filtering::shouldInclude(const std::filesystem::directory_entry& entry,
 	std::error_code ec;
 	if (options.dirsOnly && !entry.is_directory(ec)) return false;
 
-	if (!options.ignore.empty()) {
-		std::string cur;
+	if (options.ignores.contains(name))
+		return false;
 
-		for (char c : options.ignore) {
-			if (c == '|') {
-				if (cur == name) return false;
-				cur.clear();
-			}
-			else {
-				cur += c;
-			}
-		}
-
-		if (cur == name) return false;
-	}
 	return true;
 }

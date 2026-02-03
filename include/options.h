@@ -1,8 +1,8 @@
 #pragma once
 
 #include <optional>
-#include <vector>
 #include <string>
+#include <unordered_set>
 
 struct Options {
 	bool showAll = false;
@@ -11,5 +11,5 @@ struct Options {
 	bool showDate = false;
 	std::optional<int> maxDepth;
 	bool reverseOrder = false;
-	std::string ignore;
+	std::unordered_set<std::string> ignores;
 };

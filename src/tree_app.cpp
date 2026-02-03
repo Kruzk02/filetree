@@ -39,6 +39,7 @@ void TreeApp::showVersion() {
 
 Options TreeApp::parseOptions(int argc, char *argv[]) {
     Options opts;
+    std::string argument;
 
     for (int i = 1; i < argc; ++i) {
         if (std::string_view arg{argv[i]}; arg == "-a" || arg == "--all") {
@@ -62,11 +63,31 @@ Options TreeApp::parseOptions(int argc, char *argv[]) {
         }
         else if (arg == "-I" || arg == "--ignore") {
             if (++i >= argc)
-                throw std::runtime_error("-L requires a folder or files");
-            opts.ignore += argv[i];
+                throw std::runtime_error("-I requires a folder or files");
+            if (!argument.empty()) argument += "|";
+
+            argument += argv[i];
         }
         else {
             throw std::runtime_error(fmt::format("Unknown option: {}", arg));
+        }
+    }
+
+    if (!argument.empty()) {
+        std::string cur;
+
+        for (char c : argument) {
+            if (c == '|') {
+                opts.ignores.insert(cur);
+                cur.clear();
+            }
+            else {
+                cur += c;
+            }
+        }
+
+        if (!cur.empty()) {
+            opts.ignores.insert(cur);
         }
     }
     return opts;
