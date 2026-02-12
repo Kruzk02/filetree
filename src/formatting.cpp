@@ -1,3 +1,4 @@
+#include <format>
 #include <formatting.h>
 
 namespace fs = std::filesystem;
@@ -5,12 +6,12 @@ namespace fs = std::filesystem;
 std::string Formatting::formatDate(const std::filesystem::file_time_type& time) {
 	using namespace std::chrono;
 
-    auto sctp = time_point_cast<system_clock::duration>(
+    const auto sctp = time_point_cast<system_clock::duration>(
         time - fs::file_time_type::clock::now()
         + system_clock::now()
     );
 
-    std::time_t t = system_clock::to_time_t(sctp);
+    const std::time_t t = system_clock::to_time_t(sctp);
 
     char buf[11];
     std::tm tm{};

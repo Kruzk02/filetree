@@ -30,14 +30,11 @@ std::vector<std::string> FileTree::buildRecursive(const std::filesystem::path &p
                                                   const Options &options,
                                                   const std::string &prefix,
                                                   int depth) {
-    Formatting formatting;
-    Filtering filtering;
-
     std::vector<std::string> lines;
     std::vector<fs::directory_entry> entries;
 
-    for (const auto& e : getEntries(path)) {
-        if (filtering.shouldInclude(e, options)) {
+    for (const auto &e: getEntries(path)) {
+        if (Filtering::shouldInclude(e, options)) {
             entries.push_back(e);
         }
     }
@@ -55,7 +52,7 @@ std::vector<std::string> FileTree::buildRecursive(const std::filesystem::path &p
         }
 
         std::string line = prefix + (isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ");
-        line += formatting.formatEntry(entry, options);
+        line += Formatting::formatEntry(entry, options);
         lines.push_back(line);
 
         if (entry.is_directory()) {

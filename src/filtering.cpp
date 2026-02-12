@@ -6,8 +6,7 @@ bool Filtering::shouldInclude(const std::filesystem::directory_entry& entry,
 
 	if (!options.showAll && name.starts_with('.')) return false;
 
-	std::error_code ec;
-	if (options.dirsOnly && !entry.is_directory(ec)) return false;
+	if (std::error_code ec; options.dirsOnly && !entry.is_directory(ec)) return false;
 
 	if (options.ignores.contains(name))
 		return false;

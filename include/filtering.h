@@ -6,6 +6,6 @@
 
 class Filtering {
 public:
-	bool shouldInclude(const std::filesystem::directory_entry& entry,
-		const Options& options);
+	static bool shouldInclude(const std::filesystem::directory_entry& entry,
+	                          const Options& options);
 };
