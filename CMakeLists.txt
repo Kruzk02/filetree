@@ -31,7 +31,7 @@ target_link_libraries(filetree PRIVATE fmt::fmt)
 # ---------------- Tests ----------------
 file(GLOB_RECURSE TEST_SRC CONFIGURE_DEPENDS tests/*.cpp)
 
-add_executable(filetree_tests ${TEST_SRC})
+add_executable(filetree_tests ${TEST_SRC} src/filtering.cpp)
 target_include_directories(filetree_tests PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(filetree_tests PRIVATE doctest::doctest fmt::fmt)
 
