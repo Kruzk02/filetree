@@ -3,8 +3,8 @@
 
 namespace fs = std::filesystem;
 
-std::string Formatting::formatDate(const std::filesystem::file_time_type& time) {
-	using namespace std::chrono;
+std::string Formatting::formatDate(const std::filesystem::file_time_type &time) {
+    using namespace std::chrono;
 
     const auto sctp = time_point_cast<system_clock::duration>(
         time - fs::file_time_type::clock::now()
@@ -21,19 +21,28 @@ std::string Formatting::formatDate(const std::filesystem::file_time_type& time) 
     return std::format("[{}]", buf);
 }
 
-std::string Formatting::formatEntry(const std::filesystem::directory_entry& entry,
-	const Options& options) {
-    std::string name = entry.path().filename().string();
+std::string Formatting::formatEntry(const std::filesystem::directory_entry &entry,
+                                    const Options &options) {
+    return formatEntry(
+        {
+            entry.path().string(),
+            entry.is_directory() ? EntryType::Directory : EntryType::File,
+            entry.last_write_time()
+        }, options);
+}
 
-    if (options.fullPath && entry.is_regular_file()) {
-        name = entry.path().string();
+std::string Formatting::formatEntry(const EntryInfo &entryInfo, const Options &options) {
+    std::string name = entryInfo.path.filename().string();
+
+    if (options.fullPath && entryInfo.type == EntryType::File) {
+        name = entryInfo.path.string();
     }
 
     if (options.showDate) {
-        name = formatDate(entry.last_write_time()) + "  " + name;
+        name = formatDate(entryInfo.lastWriteTime) + "  " + name;
     }
 
-    if (entry.is_directory()) {
+    if (entryInfo.type == EntryType::Directory) {
         name += "/";
     }
 
