@@ -1,13 +1,9 @@
 #pragma once
 
-#include <options.h>
+#include "options.h"
+#include "entryinfo.h"
 
 #include <filesystem>
-
-struct EntryInfo {
-	std::string name;
-	bool isDir;
-};
 
 class Filtering {
 public:
