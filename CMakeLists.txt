@@ -6,13 +6,34 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
+
 FetchContent_Declare(
-  fmt
-  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-  GIT_TAG 12.0.0)
+        fmt
+        GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+        GIT_TAG 12.0.0
+)
 FetchContent_MakeAvailable(fmt)
 
+FetchContent_Declare(
+        doctest
+        GIT_REPOSITORY https://github.com/doctest/doctest.git
+        GIT_TAG v2.4.12
+)
+FetchContent_MakeAvailable(doctest)
+
+# ---------------- App ----------------
 file(GLOB_RECURSE APP_SRC CONFIGURE_DEPENDS src/*.cpp)
-add_executable(filetree ${APP_SRC} "src/formatting.cpp" "include/formatting.h" "include/filtering.h" "src/filtering.cpp" "include/options.h")
+
+add_executable(filetree ${APP_SRC})
 target_include_directories(filetree PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(filetree PRIVATE fmt::fmt)
+
+# ---------------- Tests ----------------
+file(GLOB_RECURSE TEST_SRC CONFIGURE_DEPENDS tests/*.cpp)
+
+add_executable(filetree_tests ${TEST_SRC})
+target_include_directories(filetree_tests PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(filetree_tests PRIVATE doctest::doctest fmt::fmt)
+
+enable_testing()
+add_test(NAME filetree_tests COMMAND filetree_tests)
