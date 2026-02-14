@@ -15,11 +15,11 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(fmt)
 
 FetchContent_Declare(
-        doctest
-        GIT_REPOSITORY https://github.com/doctest/doctest.git
-        GIT_TAG v2.4.12
+        Catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG v3.12.0
 )
-FetchContent_MakeAvailable(doctest)
+FetchContent_MakeAvailable(Catch2)
 
 # ---------------- App ----------------
 file(GLOB_RECURSE APP_SRC CONFIGURE_DEPENDS src/*.cpp)
@@ -31,9 +31,9 @@ target_link_libraries(filetree PRIVATE fmt::fmt)
 # ---------------- Tests ----------------
 file(GLOB_RECURSE TEST_SRC CONFIGURE_DEPENDS tests/*.cpp)
 
-add_executable(filetree_tests ${TEST_SRC} src/filtering.cpp)
+add_executable(filetree_tests ${TEST_SRC} src/filtering.cpp src/formatting.cpp)
 target_include_directories(filetree_tests PRIVATE ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(filetree_tests PRIVATE doctest::doctest fmt::fmt)
+target_link_libraries(filetree_tests PRIVATE Catch2::Catch2WithMain fmt::fmt)
 
 enable_testing()
 add_test(NAME filetree_tests COMMAND filetree_tests)
