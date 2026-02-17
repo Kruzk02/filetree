@@ -61,7 +61,7 @@ std::vector<std::string> FileTree::buildRecursive(const std::filesystem::path &p
                 entry.path().string(),
                 options,
                 prefix + (isLast ? "  " : "\u2502 "),
-                depth++);
+                depth + 1);
             lines.insert(lines.end(), sub.begin(), sub.end());
         } else {
             totalFiles++;
