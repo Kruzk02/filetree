@@ -5,11 +5,11 @@
 #include <unordered_set>
 
 struct Options {
-	bool showAll = false;
-	bool dirsOnly = false;
-	bool fullPath = false;
-	bool showDate = false;
-	std::optional<int> maxDepth;
-	bool reverseOrder = false;
-	std::unordered_set<std::string> ignores;
+    bool showAll = false;
+    bool dirsOnly = false;
+    bool fullPath = false;
+    bool showDate = false;
+    std::optional<int> maxDepth;
+    bool reverseOrder = false;
+    std::unordered_set<std::string> ignores;
 };

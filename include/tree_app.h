@@ -7,6 +7,8 @@ public:
 
 private:
     static void showHelp();
+
     static void showVersion();
-    static Options parseOptions(int argc, char* argv[]);
+
+    static Options parseOptions(int argc, char *argv[]);
 };

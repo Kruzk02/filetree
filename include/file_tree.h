@@ -9,27 +9,27 @@
 
 class FileTree {
 public:
-	std::vector<std::string> build(const std::filesystem::path& path,
-		const Options& options);
+    std::vector<std::string> build(const std::filesystem::path &path,
+                                   const Options &options);
 
-	[[nodiscard]] int getTotalFiles() const noexcept {
-		return totalFiles;
-	}
+    [[nodiscard]] int getTotalFiles() const noexcept {
+        return totalFiles;
+    }
 
-	[[nodiscard]] int getTotalFolders() const noexcept {
-		return totalFolders;
-	}
+    [[nodiscard]] int getTotalFolders() const noexcept {
+        return totalFolders;
+    }
 
 private:
-	static std::vector<std::filesystem::directory_entry>
-		getEntries(const std::filesystem::path& path);
+    static std::vector<std::filesystem::directory_entry>
+    getEntries(const std::filesystem::path &path);
 
-	std::vector<std::string>
-		buildRecursive(const std::filesystem::path& path,
-			const Options& options,
-			const std::string& prefix,
-			int depth);
+    std::vector<std::string>
+    buildRecursive(const std::filesystem::path &path,
+                   const Options &options,
+                   const std::string &prefix,
+                   int depth);
 
-	int totalFiles = 0;
-	int totalFolders = 0;
+    int totalFiles = 0;
+    int totalFolders = 0;
 };

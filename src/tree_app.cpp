@@ -44,31 +44,25 @@ Options TreeApp::parseOptions(int argc, char *argv[]) {
     for (int i = 1; i < argc; ++i) {
         if (std::string_view arg{argv[i]}; arg == "-a" || arg == "--all") {
             opts.showAll = true;
-        }
-        else if (arg == "-d" || arg == "--dirs-only") {
+        } else if (arg == "-d" || arg == "--dirs-only") {
             opts.dirsOnly = true;
-        }
-        else if (arg == "-f" || arg == "--full-path") {
+        } else if (arg == "-f" || arg == "--full-path") {
             opts.fullPath = true;
-        }
-        else if (arg == "-D" || arg == "--show-date") {
+        } else if (arg == "-D" || arg == "--show-date") {
             opts.showDate = true;
-        }
-        else if (arg == "-L" || arg == "--max-depth") {
+        } else if (arg == "-L" || arg == "--max-depth") {
             if (++i >= argc)
                 throw std::runtime_error("-L requires a number");
             opts.maxDepth = std::stoi(argv[i]);
         } else if (arg == "-r" || arg == "--reverse-order") {
             opts.reverseOrder = true;
-        }
-        else if (arg == "-I" || arg == "--ignore") {
+        } else if (arg == "-I" || arg == "--ignore") {
             if (++i >= argc)
                 throw std::runtime_error("-I requires a folder or files");
             if (!argument.empty()) argument += "|";
 
             argument += argv[i];
-        }
-        else {
+        } else {
             throw std::runtime_error(fmt::format("Unknown option: {}", arg));
         }
     }
@@ -76,12 +70,11 @@ Options TreeApp::parseOptions(int argc, char *argv[]) {
     if (!argument.empty()) {
         std::string cur;
 
-        for (char c : argument) {
+        for (char c: argument) {
             if (c == '|') {
                 opts.ignores.insert(cur);
                 cur.clear();
-            }
-            else {
+            } else {
                 cur += c;
             }
         }
